@@ -1,0 +1,6 @@
+{
+    "require": {
+        "symfony/finder": "2.1.*"
+    }
+}
+
