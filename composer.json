@@ -1,6 +1,7 @@
 {
     "require": {
-        "symfony/finder": "2.1.*"
+        "symfony/finder": "2.1.*",
+        "symfony/dom-crawler": "2.1.*",
+        "symfony/css-selector": "2.1.*"
     }
 }
-
