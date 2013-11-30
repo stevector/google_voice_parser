@@ -24,29 +24,6 @@ use Symfony\Component\DomCrawler\Crawler;
 class GoogleVoiceParserUnitTests extends PHPUnit_Framework_TestCase  {
 
   /**
-   * Get a the file path of a test csv file.
-   */
-  protected function getTestHtmlFilePath($name) {
-    // @todo, eventually there may need to be a more robust way of going from
-    // a name variable to a full path.
-    return  'test_html/Test Sender - Text - 2013-09-27T11_26_44Z.html';
-  }
-
-  public function dataProviderTestOfSingleFile() {
-    return array(
-//        array(
-//         'a',
-//         'b',
-//        )
-
-      array(
-        $this->getTestHtmlFilePath('todo'),
-        $this->getExpectedSingleResultsArray(),
-      )
-    );
-  }
-
-  /**
    *
    * @return array
    *   An array of arrays to pass to testOfSingleMessageParser().
@@ -96,28 +73,4 @@ class GoogleVoiceParserUnitTests extends PHPUnit_Framework_TestCase  {
     $derived_array['message'] .= ' ';
     $this->assertTrue($expected_array !== $derived_array, 'The expected array is not identical to the derived array');
   }
-
-  /**
-   * Unit test of field_creator_csvToArray().
-   *
-   * @dataProvider dataProviderTestOfSingleFile
-   */
-  public function testOfSingleFile($expected_html_path, $expected_array) {
-
-    $contents = file_get_contents($expected_html_path);
-
-    $crawler = new Crawler($contents);
-
-
-    $message = $crawler->filter('div.message')->each(function ($node, $i) {
-       return singleMessageParser($node);
-    });
-
-
-
-    print_r($message);
-
-    $this->assertTRUE('a' == 'a', 'test message');
-  }
-
 }
