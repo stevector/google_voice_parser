@@ -4,20 +4,37 @@ use Symfony\Component\DomCrawler\Crawler;
 
 
 
+class singleMessageParser {
 
-function singleMessageParser($message) {
-  $return = array();
+  // Upon construction the message will be turned into an array.
+  // Those values may be santized.
+  protected $rawArray;
 
-  // A dependency injection container could be used instead of hard-coding
-  // This class name.
-  $messageCrawler = new Crawler($message);
+  public function __construct($message) {
+    $this->rawArray = $this->tranformToRawArray($message);
+  }
 
-  $return['time'] = $messageCrawler->filter('div abbr')->attr('title');
-  $return['sender_number'] = $messageCrawler->filter(' div cite a')->attr('href');
-  $return['sender_name'] = $messageCrawler->filter('div cite .fn')->text();
-  $return['message'] = $messageCrawler->filter('div q')->text();
+  public function tranformToRawArray($message) {
+    $return = array();
 
-  return $return;
+    // A dependency injection container could be used instead of hard-coding
+    // This class name.
+    $messageCrawler = new Crawler($message);
+
+    $return['time'] = $messageCrawler->filter('div abbr')->attr('title');
+    $return['sender_number'] = $messageCrawler->filter(' div cite a')->attr('href');
+    $return['sender_name'] = $messageCrawler->filter('div cite .fn')->text();
+    $return['message'] = $messageCrawler->filter('div q')->text();
+
+    return $return;
+  }
+
+  public function getOutputArray() {
+    if (!empty($this->outputArray)) {
+      $this->outputArray = $this->rawArray;
+    }
+    return $this->rawArray;
+  }
 }
 
 
