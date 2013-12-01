@@ -68,7 +68,7 @@ class GoogleVoiceParserUnitTests extends PHPUnit_Framework_TestCase  {
     $derived_array = singleMessageParser($source);
 
     $this->assertTrue($expected_array === $derived_array, 'The expected array is identical to the derived array');
-    // verify that a small change to a value in the derived_array results
+    // Verify that a small change to a value in the derived_array results
     // in un-identical arrays.
     $derived_array['message'] .= ' ';
     $this->assertTrue($expected_array !== $derived_array, 'The expected array is not identical to the derived array');

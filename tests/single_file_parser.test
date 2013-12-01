@@ -34,11 +34,6 @@ class GoogleVoiceFileParserUnitTests extends PHPUnit_Framework_TestCase  {
 
   public function dataProviderTestOfSingleFile() {
     return array(
-//        array(
-//         'a',
-//         'b',
-//        )
-
       array(
         $this->getTestHtmlFilePath('todo'),
         $this->getExpectedSingleResultsArray(),
@@ -53,20 +48,32 @@ class GoogleVoiceFileParserUnitTests extends PHPUnit_Framework_TestCase  {
    */
   public function testOfSingleFile($expected_html_path, $expected_array) {
 
-    $contents = file_get_contents($expected_html_path);
+    $derived_array = singleFileParser($expected_html_path);
+    $this->assertTRUE($derived_array === $expected_array, 'The expected array is identical to the derived array');
 
-    $crawler = new Crawler($contents);
-
-
-    $message = $crawler->filter('div.message')->each(function ($node, $i) {
-       return singleMessageParser($node);
-    });
-
-
-
-    print_r($message);
-
-    $this->assertTRUE('a' == 'a', 'test message');
+    // Verify that a small change to a value in the derived_array results
+    // in un-identical arrays.
+    $derived_array[0]['message'] .= ' ';
+    $this->assertTrue($expected_array !== $derived_array, 'The expected array is not identical to the derived array');
   }
 
+  public function getExpectedSingleResultsArray() {
+
+    $return = array(
+      array(
+        'time' => '2013-09-27T11:26:44.258Z',
+        'sender_number' => 'tel:+14145551234',
+        'sender_name' => 'Test Sender',
+        'message' => 'Late start, more like 8 am',
+      ),
+      array(
+        'time' => '2013-09-27T11:29:16.322Z',
+        'sender_number' => 'tel:+17735551234',
+        'sender_name' => 'Me',
+        'message' => 'Ok',
+      ),
+    );
+
+    return $return;
+  }
 }
