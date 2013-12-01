@@ -48,7 +48,9 @@ class GoogleVoiceFileParserUnitTests extends PHPUnit_Framework_TestCase  {
    */
   public function testOfSingleFile($expected_html_path, $expected_array) {
 
-    $derived_array = singleFileParser($expected_html_path);
+    $single_file_parser = new singleFileParser($expected_html_path);
+
+    $derived_array = $single_file_parser->getOutputArray();
     $this->assertTRUE($derived_array === $expected_array, 'The expected array is identical to the derived array');
 
     // Verify that a small change to a value in the derived_array results
