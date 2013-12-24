@@ -2,7 +2,6 @@
 require 'vendor/autoload.php';
 use Symfony\Component\DomCrawler\Crawler;
 
-
 $test_dir = 'data_source';
 
 
@@ -40,8 +39,6 @@ class singleMessageParser {
 }
 
 
-
-
 class singleFileParser {
 
   protected $rawArray;
@@ -73,13 +70,8 @@ class singleFileParser {
 class directoryParser {
 
   protected function __construct($directory_path) {
-
-
   }
-
-
 }
-
 
 
 $scanned = scandir($test_dir);
@@ -92,15 +84,12 @@ foreach ($scanned as $file_name) {
 
     // @todo only caring about texts for now.
 
-
     if (strpos($file_name, ' - Text - ')) {
       $single_file_parser = new singleFileParser($test_dir . '/' . $file_name);
       $derived_array = $single_file_parser->getOutputArray();
       $all_messages = array_merge($all_messages, $derived_array);
     }
   }
-
-
 }
 
 
