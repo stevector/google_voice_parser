@@ -1,0 +1,4 @@
+google_voice_parser_first:
+    resource: "@GoogleVoiceParserFirstBundle/Resources/config/routing.yml"
+    prefix:   /
+

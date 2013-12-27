@@ -1,0 +1,7 @@
+parameters:
+#    google_voice_parser_first.example.class: GoogleVoiceParser\FirstBundle\Example
+
+services:
+#    google_voice_parser_first.example:
+#        class: %google_voice_parser_first.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
