@@ -18,46 +18,12 @@ use \Altamira\ChartDatum\TwoDimensionalPointFactory;
 
 class DefaultController extends Controller
 {
-    public function indexAction($name)
-    {
+  public function indexAction($name)
+  {
 
 
 
-        return $this->jqplotAction();
-
-$test_dir = '/Users/stevepersch/Sites/google_voice_parser/source_files';
-
-
-
-
-
-$scanned = scandir($test_dir);
-$all_messages = array();
-
-
-//print_r($scanned);
-foreach ($scanned as $file_name) {
-
-  if (strpos($file_name, '.html') === (strlen($file_name)-5)) {
-
-    // @todo only caring about texts for now.
-
-    if (strpos($file_name, ' - Text - ')) {
-    if (strpos($file_name, 'Garn')) {
-      $single_file_parser = new singleFileParser($test_dir . '/' . $file_name);
-      $derived_array = $single_file_parser->getOutputArray();
-
-//      print_r($derived_array);
-      $all_messages = array_merge($all_messages, $derived_array);
-    }
-    }
-  }
-}
-
-
-// print_r($all_messages);
-
-
+  return $this->jqplotAction();
 
 
 $source = new Vector($all_messages);
@@ -83,9 +49,9 @@ $grid->setPermanentFilters(array(
 
 //$grid->addExport(new CSVExport('CSV Export'));
 
- return $grid->getGridResponse('GoogleVoiceParserFirstBundle:Default:grid.html.twig');
+return $grid->getGridResponse('GoogleVoiceParserFirstBundle:Default:grid.html.twig');
 
-        return $this->render('GoogleVoiceParserFirstBundle:Default:index.html.twig', array('name' => $name));
+return $this->render('GoogleVoiceParserFirstBundle:Default:index.html.twig', array('name' => $name));
     }
 
     /**
@@ -96,71 +62,54 @@ $grid->setPermanentFilters(array(
     }
 
 
+    public function getExclamationPointsArray() {
+      $messages_stats = $this->getMessages();
+      $points = array();
+      foreach ($messages_stats as $month => $stats) {
+        $points[] = array(
+          $month,
+          $stats['percentage'],
+        );
+      }
 
-    private function sampleChartGenerator($library=null) {
+      return $points;
+    }
 
-
-       // print_r();
+    private function sampleChartGenerator($library = null) {
 
         $chartsFactory=$this->get('charts_factory');
-        if ( !is_null($library) ) {
+        if (!is_null($library)) {
             $chartsFactory->setLibrary($library);
         };
-        $charts=array();
+        $charts = array();
 
-        for ($i=1; $i<=2;$i++) {
+        for ($i=1; $i<=1;$i++) {
             $charts[]=$chartsFactory->createChart('chart'.$i);
         }
 
 
-        $messages_stats = $this->getMessages();
-        $points = array();
-        foreach ($messages_stats as $month => $stats) {
-          $points[] = array(
-              $month,
-              $stats['percentage'],
-);
+        $points_sets = array(
+          array(
+            'points' => $this->getExclamationPointsArray(),
+            'title' => 'Percentage Of texts that used an exclamation point',
+          ),
+        );
+
+        foreach ($points_sets as $set) {
+          $seriesPoints = TwoDimensionalPointFactory::getFromNested($set['points']);
+          $series = $charts[0]->createSeries($seriesPoints, $set['title']);
+          $series->setLabelSetting('timeformat', '%b %Y');
+          $charts[0]->addSeries($series);
         }
 
-
-        $series1Points = TwoDimensionalPointFactory::getFromNested($points);
-
-        $charts[0]->addSeries($charts[0]->createSeries($series1Points, 'Percentage Of texts that used an exclamation point'))->
-
-
-        setTitle('Percentage Of texts that used an exclamation point')->
-        setAxisOptions('y', 'formatString', '%d%')->
-        setAxisOptions('x', 'tickInterval', 1)->
-        setAxisOptions('x', 'min', 0)->
-        setLegend(array('on'=>true))
-        ->setAxisOptions( 'x', 'min', 0)
-        ->setAxisOptions( 'x', 'max', count($points))
-        ->setAxisOptions( 'y', 'min', 0)
-        ->setAxisOptions( 'y', 'max', 100)
-                ->useHighlighting();
-
-
-        $seriesPoints = TwoDimensionalPointFactory::getFromNested( $points
-                                                                );
-        $series = $charts[1]->createSeries($seriesPoints, 'Percentage Of texts that used an exclamation point');
-        $series ->
-            setLabelSetting('timeformat', '%b %Y') //->
-           // setLabelSetting('xpadding', 8)->
-           // setLabelSetting('ypadding', 8)
-                ;
-
-
-
-
-        $charts[1]->addSeries($series)->setTitle('Line Chart With Highlights and Labels')
-                    ->useDates()
-                    ->setAxisOptions('x', 'formatString', '%b %Y')
-                        ->setAxisOptions('y', 'formatString', '%d%')
-                ->setLegend(array('on'=>true))
-                    ->useHighlighting();
+        $charts[0]->setTitle('Line Chart With Highlights and Labels')
+          ->useDates()
+          ->setAxisOptions('x', 'formatString', '%b %Y')
+          ->setAxisOptions('y', 'formatString', '%d%')
+          ->setLegend(array('on'=>true))
+          ->useHighlighting();
 
         $chartIterator = $chartsFactory->getChartIterator($charts);
-
         $altamiraJSLibraries=$chartIterator->getLibraries();
         $altamiraCSS=$chartIterator->getCSSPath();
         $altamiraJSScript=$chartIterator->getScripts();
@@ -171,8 +120,6 @@ $grid->setPermanentFilters(array(
             $chartIterator->next();
         }
 
-
-        //print_r($charts);
         return $this->render('MalwarebytesAltamiraBundle:Default:example.html.twig', array('altamiraJSLibraries'=> $altamiraJSLibraries, 'altamiraCSS'=> $altamiraCSS, 'altamiraScripts' =>  $altamiraJSScript, 'altamiraCharts' => $altamiraCharts, 'altamiraJSPlugins' => $altamiraPlugins));
     }
 
@@ -192,7 +139,6 @@ $grid->setPermanentFilters(array(
         if (strpos($file_name, 'Garn')) {
           $single_file_parser = new singleFileParser($test_dir . '/' . $file_name);
           $derived_array = $single_file_parser->getOutputArray();
-
           $all_messages = array_merge($all_messages, $derived_array);
         }
         }
