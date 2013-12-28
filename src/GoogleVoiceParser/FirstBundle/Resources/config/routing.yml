@@ -1,3 +1,6 @@
-google_voice_parser_first_homepage:
-    pattern:  /hello/{name}
+google_voice_parser_grid:
+    pattern:  /grid
     defaults: { _controller: GoogleVoiceParserFirstBundle:Default:index }
+google_voice_parser_chart:
+    pattern:  /chart
+    defaults: { _controller: GoogleVoiceParserFirstBundle:Default:jqplot }

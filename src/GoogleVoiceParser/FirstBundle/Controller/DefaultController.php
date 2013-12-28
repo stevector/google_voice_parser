@@ -18,12 +18,14 @@ use \Altamira\ChartDatum\TwoDimensionalPointFactory;
 
 class DefaultController extends Controller
 {
-  public function indexAction($name)
+  public function indexAction()
   {
 
 
 
-  return $this->jqplotAction();
+  //return $this->jqplotAction();
+
+    $all_messages = $this->getAllMessages();
 
 
 $source = new Vector($all_messages);
@@ -62,8 +64,8 @@ return $this->render('GoogleVoiceParserFirstBundle:Default:index.html.twig', arr
     }
 
 
-    public function getExclamationPointsArray() {
-      $messages_stats = $this->getMessages();
+    public function getPointsArray($string_to_find) {
+      $messages_stats = $this->getMessages($string_to_find);
       $points = array();
       foreach ($messages_stats as $month => $stats) {
         $points[] = array(
@@ -90,9 +92,15 @@ return $this->render('GoogleVoiceParserFirstBundle:Default:index.html.twig', arr
 
         $points_sets = array(
           array(
-            'points' => $this->getExclamationPointsArray(),
+            'points' => $this->getPointsArray('!'),
             'title' => 'Percentage Of texts that used an exclamation point',
           ),
+          array(
+            'points' => $this->getPointsArray('?'),
+            'title' => 'Percentage Of texts that used a question point',
+          ),
+
+
         );
 
         foreach ($points_sets as $set) {
@@ -136,10 +144,15 @@ return $this->render('GoogleVoiceParserFirstBundle:Default:index.html.twig', arr
         // @todo only caring about texts for now.
 
         if (strpos($file_name, ' - Text - ')) {
-        if (strpos($file_name, 'Garn')) {
+
+        if (!strpos($file_name, 'Penrod')) {
+        if (!strpos($file_name, 'Friedman')) {
+        // if (strpos($file_name, 'Garn')) {
           $single_file_parser = new singleFileParser($test_dir . '/' . $file_name);
           $derived_array = $single_file_parser->getOutputArray();
           $all_messages = array_merge($all_messages, $derived_array);
+       // }
+        }
         }
         }
       }
@@ -147,7 +160,8 @@ return $this->render('GoogleVoiceParserFirstBundle:Default:index.html.twig', arr
     return $all_messages;
   }
 
-  function getMessages() {
+  function getMessages($string_to_find) {
+    ini_set('max_execution_time', '300');
     $all_messages = $this->getAllMessages();
 
     $texts_from_me = array();
@@ -171,7 +185,7 @@ return $this->render('GoogleVoiceParserFirstBundle:Default:index.html.twig', arr
       }
 
       $results[$month]['total_texts']++;
-      if (strpos($message['message'], '!') !== FALSE) {
+      if (strpos($message['message'], $string_to_find) !== FALSE) {
         $results[$month]['texts_with_exclamation']++;
       }
     }
