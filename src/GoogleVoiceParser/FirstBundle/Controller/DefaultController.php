@@ -39,7 +39,7 @@ foreach ($scanned as $file_name) {
     // @todo only caring about texts for now.
 
     if (strpos($file_name, ' - Text - ')) {
-    if (strpos($file_name, 'Ga')) {      
+    if (strpos($file_name, 'Garn')) {
       $single_file_parser = new singleFileParser($test_dir . '/' . $file_name);
       $derived_array = $single_file_parser->getOutputArray();
       
@@ -52,23 +52,6 @@ foreach ($scanned as $file_name) {
 
 
 // print_r($all_messages);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
    
@@ -92,7 +75,7 @@ $grid->setPermanentFilters(array(
 ));
 
 //$grid->prepare();
-        print_r($grid->getSource()->getData());
+      //  print_r($grid->getSource()->getData());
 
 //$grid->addExport(new CSVExport('CSV Export'));
 
