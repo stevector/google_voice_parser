@@ -88,14 +88,6 @@ $grid->setPermanentFilters(array(
         return $this->render('GoogleVoiceParserFirstBundle:Default:index.html.twig', array('name' => $name));
     }
 
-
-    /**
-     * specify the flot library
-     */
-    public function flotAction() {
-        return $this->sampleChartGenerator("flot");
-    }
-
     /**
      * specify the jqplot library
      */
@@ -124,19 +116,19 @@ $grid->setPermanentFilters(array(
         $messages_stats = $this->getMessages();
         $points = array();
         foreach ($messages_stats as $month => $stats) {
-          $points[] = $stats['percentage'];
-
+          $points[] = array(
+              $month,
+              $stats['percentage'],
+);
         }
 
 
-      //  $points = array(2, 8, 5, 3, 8, 9, 7, 8, 4, 2, 1, 6);
+        $series1Points = TwoDimensionalPointFactory::getFromNested($points);
 
-        $series1Points = TwoDimensionalPointFactory::getFromYValues($points);
-
-        $charts[0]->addSeries($charts[0]->createSeries($series1Points, 'Percentage Of texts Using an exclamation point'))->
+        $charts[0]->addSeries($charts[0]->createSeries($series1Points, 'Percentage Of texts that used an exclamation point'))->
 
 
-        setTitle('Basic Line Chart')->
+        setTitle('Percentage Of texts that used an exclamation point')->
         setAxisOptions('y', 'formatString', '%d%')->
         setAxisOptions('x', 'tickInterval', 1)->
         setAxisOptions('x', 'min', 0)->
@@ -147,6 +139,25 @@ $grid->setPermanentFilters(array(
         ->setAxisOptions( 'y', 'max', 100)
                 ->useHighlighting();
 
+
+        $seriesPoints = TwoDimensionalPointFactory::getFromNested( $points
+                                                                );
+        $series = $charts[1]->createSeries($seriesPoints, 'Percentage Of texts that used an exclamation point');
+        $series ->
+            setLabelSetting('timeformat', '%b %Y') //->
+           // setLabelSetting('xpadding', 8)->
+           // setLabelSetting('ypadding', 8)
+                ;
+
+
+
+
+        $charts[1]->addSeries($series)->setTitle('Line Chart With Highlights and Labels')
+                    ->useDates()
+                    ->setAxisOptions('x', 'formatString', '%b %Y')
+                        ->setAxisOptions('y', 'formatString', '%d%')
+                ->setLegend(array('on'=>true))
+                    ->useHighlighting();
 
         $chartIterator = $chartsFactory->getChartIterator($charts);
 
@@ -178,12 +189,12 @@ $grid->setPermanentFilters(array(
         // @todo only caring about texts for now.
 
         if (strpos($file_name, ' - Text - ')) {
-       // if (strpos($file_name, 'Ga')) {
+        if (strpos($file_name, 'Garn')) {
           $single_file_parser = new singleFileParser($test_dir . '/' . $file_name);
           $derived_array = $single_file_parser->getOutputArray();
 
           $all_messages = array_merge($all_messages, $derived_array);
-       // }
+        }
         }
       }
     }
