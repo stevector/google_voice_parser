@@ -1,0 +1,77 @@
+<?php
+
+/**
+ * @file
+ * Tests of parser.
+ */
+
+require '../vendor/autoload.php';
+
+// @todo, organize code into classes.
+require '../index.php';
+
+
+
+use Symfony\Component\DomCrawler\Crawler;
+
+
+/**
+ * Unit tests for csv functions.
+ *
+ * @todo, these functions might belong in there own class totally independent
+ * of Drupal. These tests could then be done through PHPUnit.
+ */
+class GoogleVoiceParserUnitTests extends PHPUnit_Framework_TestCase  {
+
+  /**
+   *
+   * @return array
+   *   An array of arrays to pass to testOfSingleMessageParser().
+   */
+  public function dataProviderTestOfSingleMessageParser() {
+
+     $markup = '
+      <div class="message">
+        <abbr class="dt" title="2013-09-27T11:26:44.258Z">
+          Sep 27, 2013, 11:26:44 AM GMT
+        </abbr>:
+        <cite class="sender vcard">
+          <a class="tel" href="tel:+14145551234">
+            <span class="fn">Test Sender</span>
+          </a>
+        </cite>:
+        <q>Late start, more like 8 am</q>
+      </div>';
+
+    $expected_array = array(
+      'time' => '2013-09-27T11:26:44.258Z',
+      'sender_number' => 'tel:+14145551234',
+      'sender_name' => 'Test Sender',
+      'message' => 'Late start, more like 8 am',
+    );
+
+    return array(
+      array(
+        $markup,
+        $expected_array,
+      ),
+    );
+  }
+
+  /**
+   * Unit test of field_creator_csvToArray().
+   *
+   * @dataProvider dataProviderTestOfSingleMessageParser
+   */
+  public function testOfSingleMessageParser($source, $expected_array) {
+
+    $single_message_parser= new singleMessageParser($source);
+    $derived_array = $single_message_parser->getOutputArray();
+
+    $this->assertTrue($expected_array === $derived_array, 'The expected array is identical to the derived array');
+    // Verify that a small change to a value in the derived_array results
+    // in un-identical arrays.
+    $derived_array['message'] .= ' ';
+    $this->assertTrue($expected_array !== $derived_array, 'The expected array is not identical to the derived array');
+  }
+}
