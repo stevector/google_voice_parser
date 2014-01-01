@@ -3,4 +3,4 @@ google_voice_parser_grid:
     defaults: { _controller: GoogleVoiceParserFirstBundle:Default:index }
 google_voice_parser_chart:
     pattern:  /chart
-    defaults: { _controller: GoogleVoiceParserFirstBundle:Default:jqplot }
+    defaults: { _controller: GoogleVoiceParserFirstBundle:Plot:index }
