@@ -1,6 +1,6 @@
 google_voice_parser_first:
     resource: "@GoogleVoiceParserFirstBundle/Resources/config/routing.yml"
-    prefix:   /
+    prefix:   /google_voice
 altamira_example:
     resource: "@MalwarebytesAltamiraBundle/Resources/config/routing.yml"
     prefix:   /chart_demo
