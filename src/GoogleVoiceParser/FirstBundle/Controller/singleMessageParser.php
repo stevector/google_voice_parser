@@ -1,5 +1,9 @@
 <?php
 
+// @todo This class shouldn't be under the controller namespace and perhaps not
+// at all in the bundle. I had trouble getting it to load under another
+// namespace.
+
 namespace GoogleVoiceParser\FirstBundle\Controller;
 use Symfony\Component\CssSelector\CssSelector;
 
@@ -19,6 +23,7 @@ class singleMessageParser {
   public function tranformToRawArray($messageCrawler) {
     $return = array();
 
+    // @todo change this function back to taking a string.
     // A dependency injection container could be used instead of hard-coding
     // This class name.
     //$messageCrawler = new Crawler($message);
@@ -27,7 +32,6 @@ class singleMessageParser {
     $return['sender_number'] = $messageCrawler->filter(' div cite a')->attr('href');
     $return['sender_name'] = $messageCrawler->filter('div cite .fn')->text();
     $return['message'] = $messageCrawler->filter('div q')->text();
-//print_r($return);
     return $return;
   }
 

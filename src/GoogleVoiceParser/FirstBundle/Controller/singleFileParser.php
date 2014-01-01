@@ -1,5 +1,8 @@
 <?php
 
+// @todo This class shouldn't be under the controller namespace and perhaps not
+// at all in the bundle. I had trouble getting it to load under another
+// namespace.
 namespace GoogleVoiceParser\FirstBundle\Controller;
 
 use Symfony\Component\DomCrawler\Crawler;
@@ -12,8 +15,6 @@ class singleFileParser {
   protected $fileUri;
 
   function __construct($uri) {
-      
-      
     $this->fileUri = $uri;
   }
 
@@ -23,15 +24,8 @@ class singleFileParser {
     $contents = file_get_contents($this->fileUri);
     $crawler = new Crawler();
     $crawler->addHtmlContent($contents);
-//print_r($crawler);
-//    print_r($contents);
 
-   
     $messages = $crawler->filter('div.message')->each(function ($node, $i) {
-    
-          //      print_r('hello');    
-
-  //      print_r($node);
       $single_message_parser= new singleMessageParser($node);
      return $single_message_parser->getOutputArray();
     });
