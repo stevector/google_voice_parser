@@ -56,7 +56,7 @@ return $this->render('GoogleVoiceParserFirstBundle:Default:index.html.twig', arr
     }
 
     /**
-     * specify the jqplot library
+     * specify the jqplot library.
      */
     public function jqplotAction() {
         return $this->sampleChartGenerator("jqPlot");
@@ -85,26 +85,23 @@ return $this->render('GoogleVoiceParserFirstBundle:Default:index.html.twig', arr
         $charts = array();
 
         for ($i=1; $i<=1;$i++) {
-            $charts[]=$chartsFactory->createChart('chart'.$i);
+            $charts[]=$chartsFactory->createChart('chart' . $i);
         }
-
 
         $points_sets = array(
           array(
             'points' => $this->getPointsArray('!'),
             'title' => 'Percentage of texts that used an exclamation point',
           ),
-//          array(
-//            'points' => $this->getPointsArray('?'),
-//            'title' => 'Percentage Of texts that used a question point',
-//          ),
-
-
+          // array(
+          //   'points' => $this->getPointsArray('?'),
+          //   'title' => 'Percentage Of texts that used a question mark',
+          // ),
         );
 
         foreach ($points_sets as $set) {
-          //$seriesPoints = TwoDimensionalPointFactory::getFromNested($set['points']);
-
+          // The factor can't hanle the additional label data.
+          // $seriesPoints = TwoDimensionalPointFactory::getFromNested($set['points']);
           foreach ($set['points'] as $point) {
             $seriesPoints[] = new TwoDimensionalPoint( array('x' => $point[0], 'y' => $point[1]), $point[2]);
           }
@@ -131,7 +128,6 @@ return $this->render('GoogleVoiceParserFirstBundle:Default:index.html.twig', arr
         $highlighter_options['tooltipLocation'] = 'e';
 
 
-
         $highlighter_options[ 'useAxesFormatters'] = TRUE;
         $jsWriter->setOption('highlighter', $highlighter_options);
 
@@ -139,8 +135,8 @@ return $this->render('GoogleVoiceParserFirstBundle:Default:index.html.twig', arr
        $series_defaults['pointLabels'][ 'show'] = TRUE;
        $jsWriter->setOption('seriesDefaults', $series_defaults);
 
-       //@todo
-//      $this->files = array_merge_recursive( array( 'jqplot.trendline.js' ), $this->files );
+       // @todo Add trendline.js properly.
+       //$this->files = array_merge_recursive( array( 'jqplot.trendline.js' ), $this->files);
 
         $chartIterator = $chartsFactory->getChartIterator($charts);
         $altamiraJSLibraries=$chartIterator->getLibraries();
@@ -157,6 +153,7 @@ return $this->render('GoogleVoiceParserFirstBundle:Default:index.html.twig', arr
     }
 
   function getAllMessages() {
+    // This string should be coming from a config file.
     $test_dir = '/Users/stevepersch/Sites/google_voice_parser/source_files';
 
     $scanned = scandir($test_dir);
@@ -179,6 +176,7 @@ return $this->render('GoogleVoiceParserFirstBundle:Default:index.html.twig', arr
     return $all_messages;
   }
 
+  // This functionality should move out to a service.
   function getMessages($string_to_find) {
     ini_set('max_execution_time', '300');
     $all_messages = $this->getAllMessages();
@@ -189,7 +187,6 @@ return $this->render('GoogleVoiceParserFirstBundle:Default:index.html.twig', arr
         $texts_from_me[] = $message;
       }
     }
-
 
     $results = array();
 
