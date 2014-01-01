@@ -10,11 +10,10 @@ use APY\DataGridBundle\Grid\Source\Vector;
 
 use APY\DataGridBundle\Grid\Export\JSONExport;
 use APY\DataGridBundle\Grid\Export\CSVExport;
-
+// @todo, Direct use of TwoDimensionalPoint was added because the factory
+// didn't have a method to handle the additional label data.
 use \Altamira\ChartDatum\TwoDimensionalPointFactory;
-
-
-
+use Altamira\ChartDatum\TwoDimensionalPoint;
 
 class DefaultController extends Controller
 {
@@ -63,7 +62,6 @@ return $this->render('GoogleVoiceParserFirstBundle:Default:index.html.twig', arr
         return $this->sampleChartGenerator("jqPlot");
     }
 
-
     public function getPointsArray($string_to_find) {
       $messages_stats = $this->getMessages($string_to_find);
       $points = array();
@@ -71,6 +69,7 @@ return $this->render('GoogleVoiceParserFirstBundle:Default:index.html.twig', arr
         $points[] = array(
           $month,
           $stats['percentage'],
+          $stats['texts_with_exclamation'] . ' out of ' .  $stats['total_texts'],
         );
       }
 
@@ -93,29 +92,55 @@ return $this->render('GoogleVoiceParserFirstBundle:Default:index.html.twig', arr
         $points_sets = array(
           array(
             'points' => $this->getPointsArray('!'),
-            'title' => 'Percentage Of texts that used an exclamation point',
+            'title' => 'Percentage of texts that used an exclamation point',
           ),
-          array(
-            'points' => $this->getPointsArray('?'),
-            'title' => 'Percentage Of texts that used a question point',
-          ),
+//          array(
+//            'points' => $this->getPointsArray('?'),
+//            'title' => 'Percentage Of texts that used a question point',
+//          ),
 
 
         );
 
         foreach ($points_sets as $set) {
-          $seriesPoints = TwoDimensionalPointFactory::getFromNested($set['points']);
+          //$seriesPoints = TwoDimensionalPointFactory::getFromNested($set['points']);
+
+          foreach ($set['points'] as $point) {
+            $seriesPoints[] = new TwoDimensionalPoint( array('x' => $point[0], 'y' => $point[1]), $point[2]);
+          }
+
+
           $series = $charts[0]->createSeries($seriesPoints, $set['title']);
           $series->setLabelSetting('timeformat', '%b %Y');
+          $series->setLabelSetting('pointLabels', 'show');
           $charts[0]->addSeries($series);
         }
 
-        $charts[0]->setTitle('Line Chart With Highlights and Labels')
+        $charts[0]->setTitle('Percentage of texts that used an exclamation point')
           ->useDates()
           ->setAxisOptions('x', 'formatString', '%b %Y')
           ->setAxisOptions('y', 'formatString', '%d%')
-          ->setLegend(array('on'=>true))
+          // ->setLegend(array('on' => true))
           ->useHighlighting();
+
+        $jsWriter = $charts[0]->getJsWriter();
+
+        $highlighter_options = $jsWriter->getOption('highlighter');
+        $highlighter_options['yvalues'] = 2;
+        $highlighter_options['formatString'] = '%s, %s (%s)';
+        $highlighter_options['tooltipLocation'] = 'e';
+
+
+
+        $highlighter_options[ 'useAxesFormatters'] = TRUE;
+        $jsWriter->setOption('highlighter', $highlighter_options);
+
+       $series_defaults =  $jsWriter->getOption('seriesDefaults');
+       $series_defaults['pointLabels'][ 'show'] = TRUE;
+       $jsWriter->setOption('seriesDefaults', $series_defaults);
+
+       //@todo
+//      $this->files = array_merge_recursive( array( 'jqplot.trendline.js' ), $this->files );
 
         $chartIterator = $chartsFactory->getChartIterator($charts);
         $altamiraJSLibraries=$chartIterator->getLibraries();
@@ -142,18 +167,12 @@ return $this->render('GoogleVoiceParserFirstBundle:Default:index.html.twig', arr
       if (strpos($file_name, '.html') === (strlen($file_name)-5)) {
 
         // @todo only caring about texts for now.
-
         if (strpos($file_name, ' - Text - ')) {
-
-        if (!strpos($file_name, 'Penrod')) {
-        if (!strpos($file_name, 'Friedman')) {
-        // if (strpos($file_name, 'Garn')) {
+        //if (strpos($file_name, 'Garn')) {
           $single_file_parser = new singleFileParser($test_dir . '/' . $file_name);
           $derived_array = $single_file_parser->getOutputArray();
           $all_messages = array_merge($all_messages, $derived_array);
        // }
-        }
-        }
         }
       }
     }
