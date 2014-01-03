@@ -9,3 +9,6 @@
 /vendor/
 /bin/
 /composer.phar
+
+# Allow the sample bundle to remain in place for reference.
+src/Acme
