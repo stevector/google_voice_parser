@@ -1,10 +1,6 @@
 <?php
 
-// @todo This class shouldn't be under the controller namespace and perhaps not
-// at all in the bundle. I had trouble getting it to load under another
-// namespace.
-
-namespace GoogleVoiceParser\FirstBundle\Controller;
+namespace GoogleVoiceParser\FirstBundle;
 use Symfony\Component\CssSelector\CssSelector;
 
 use Symfony\Component\DomCrawler\Crawler;

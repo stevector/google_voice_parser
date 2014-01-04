@@ -2,7 +2,7 @@
 
 namespace GoogleVoiceParser\FirstBundle;
 
-use GoogleVoiceParser\FirstBundle\Controller\singleFileParser;
+use GoogleVoiceParser\FirstBundle\singleFileParser;
 
 
 // @todo, come up with an Interface for this class to implement.
