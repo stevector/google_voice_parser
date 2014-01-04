@@ -20,7 +20,7 @@ class DataGetter
 
     foreach ($scanned as $file_name) {
 
-      if (strpos($file_name, '.html') === (strlen($file_name)-5)) {
+      if (strpos($file_name, '.html') === (strlen($file_name) - 5)) {
 
         // @todo only caring about texts for now.
         if (strpos($file_name, ' - Text - ')) {
@@ -32,6 +32,14 @@ class DataGetter
         }
       }
     }
-    return $all_messages;
+    // @todo, some kind of abstraction so as not to hard code texts_from_me.
+    // return $all_messages;
+    foreach ($all_messages as $message) {
+      if ($message['sender_name'] === 'Me') {
+        $texts_from_me[] = $message;
+      }
+    }
+
+    return $texts_from_me;
   }
 }

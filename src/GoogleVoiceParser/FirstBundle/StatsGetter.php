@@ -34,16 +34,12 @@ class StatsGetter
     ini_set('max_execution_time', '300');
     $all_messages = $this->data_getter->getAllMessages();
 
-    $texts_from_me = array();
-    foreach ($all_messages as $message) {
-      if ($message['sender_name'] === 'Me') {
-        $texts_from_me[] = $message;
-      }
-    }
+
+
 
     $results = array();
 
-    foreach ($texts_from_me as $message) {
+    foreach ($all_messages as $message) {
       $month = substr($message['time'], 0, 7);
 
       if (!isset($results[$month])) {
