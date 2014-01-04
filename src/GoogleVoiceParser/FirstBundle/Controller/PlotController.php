@@ -114,7 +114,6 @@ class PlotController extends DefaultController
             $altamiraCharts[]=$chartIterator->current()->getDiv();
             $chartIterator->next();
         }
-
         return $this->render('MalwarebytesAltamiraBundle:Default:example.html.twig', array('altamiraJSLibraries'=> $altamiraJSLibraries, 'altamiraCSS'=> $altamiraCSS, 'altamiraScripts' =>  $altamiraJSScript, 'altamiraCharts' => $altamiraCharts, 'altamiraJSPlugins' => $altamiraPlugins));
     }
 

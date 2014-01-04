@@ -21,10 +21,7 @@ class DefaultController extends Controller
   {
 
 
-
-  //return $this->jqplotAction();
-
-    $all_messages = $this->getAllMessages();
+$all_messages = $this->getAllMessages();
 
 
 $source = new Vector($all_messages);
@@ -58,25 +55,8 @@ return $this->render('GoogleVoiceParserFirstBundle:Default:index.html.twig', arr
 
   function getAllMessages() {
     // This string should be coming from a config file.
-    $test_dir = '/Users/stevepersch/Sites/google_voice_parser/source_files';
-
-    $scanned = scandir($test_dir);
-    $all_messages = array();
-
-    foreach ($scanned as $file_name) {
-
-      if (strpos($file_name, '.html') === (strlen($file_name)-5)) {
-
-        // @todo only caring about texts for now.
-        if (strpos($file_name, ' - Text - ')) {
-        if (strpos($file_name, 'Garn')) {
-          $single_file_parser = new singleFileParser($test_dir . '/' . $file_name);
-          $derived_array = $single_file_parser->getOutputArray();
-          $all_messages = array_merge($all_messages, $derived_array);
-        }
-        }
-      }
-    }
+    $data_getter = $this->container->get('google_voice_parser_first.data_getter');
+    $all_messages = $data_getter->getAllMessages();
     return $all_messages;
   }
 }
