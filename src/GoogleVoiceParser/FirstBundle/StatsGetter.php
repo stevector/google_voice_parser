@@ -22,16 +22,16 @@ class StatsGetter
           // @todo, Come up with a better workaround.
           $month . '-15',
           $stats['percentage'],
-          $stats['texts_with_exclamation'] . ' out of ' .  $stats['total_texts'],
+          // @todo The formatting for this string should be configurable.
+          $stats['hits'] . ' out of ' .  $stats['total'],
         );
       }
 
       return $points;
     }
 
-  // This functionality should move out to a service.
   function getMessages($string_to_find) {
-    // @todo, ini_setting is a hack here to avoid timeouts.
+    // @todo, ini_setting is a hack here to avoid timeouts. do something better.
     ini_set('max_execution_time', '300');
     $all_messages = $this->data_getter->getAllMessages();
 
@@ -41,21 +41,21 @@ class StatsGetter
 
       if (!isset($results[$month])) {
         $results[$month] = array(
-          'total_texts' => 0,
-          'texts_with_exclamation' => 0,
+          'total' => 0,
+          'hits' => 0,
         );
       }
 
-      $results[$month]['total_texts']++;
+      $results[$month]['total']++;
       if (strpos($message['message'], $string_to_find) !== FALSE) {
-        $results[$month]['texts_with_exclamation']++;
+        $results[$month]['hits']++;
       }
     }
 
     ksort($results);
 
     foreach($results as $month => $numbers) {
-      $ratio = $numbers['texts_with_exclamation'] / $numbers['total_texts'];
+      $ratio = $numbers['hits'] / $numbers['total'];
       $results[$month]['percentage'] = round($ratio, 2) * 100;
     }
 
