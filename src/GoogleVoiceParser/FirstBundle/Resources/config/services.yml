@@ -1,10 +1,10 @@
 parameters:
     # @todo, a better name than data getter.
-    google_voice_parser.data_getter.class: GoogleVoiceParser\FirstBundle\DataGetter
+    google_voice_parser.data_getter.class: GoogleVoiceParser\DataGetter
     # @todo come up with a default location that is relative. To the app root?
     google_voice_parser.data_getter.directory: "%kernel.root_dir%/google_voice_export"
     # @todo, a better name than stats getter.
-    google_voice_parser.stats_getter.class: GoogleVoiceParser\FirstBundle\StatsGetter
+    google_voice_parser.stats_getter.class: GoogleVoiceParser\StatsGetter
 
 services:
     google_voice_parser_first.data_getter:

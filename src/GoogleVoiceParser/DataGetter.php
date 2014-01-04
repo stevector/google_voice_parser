@@ -1,6 +1,6 @@
 <?php
 
-namespace GoogleVoiceParser\FirstBundle;
+namespace GoogleVoiceParser;
 
 use GoogleVoiceParser\singleFileParser;
 
