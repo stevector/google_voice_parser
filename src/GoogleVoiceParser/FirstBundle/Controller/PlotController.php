@@ -3,13 +3,7 @@
 namespace GoogleVoiceParser\FirstBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use GoogleVoiceParser\FirstBundle\Controller\singleFileParser;
-use GoogleVoiceParser\FirstBundle\Controller\singleMessageParser;
-use Symfony\Component\DomCrawler\Crawler;
-use APY\DataGridBundle\Grid\Source\Vector;
 
-use APY\DataGridBundle\Grid\Export\JSONExport;
-use APY\DataGridBundle\Grid\Export\CSVExport;
 // @todo, Direct use of TwoDimensionalPoint was added because the factory
 // didn't have a method to handle the additional label data.
 use \Altamira\ChartDatum\TwoDimensionalPointFactory;
