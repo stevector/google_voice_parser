@@ -1,6 +1,6 @@
 <?php
 
-namespace GoogleVoiceParser\FirstBundle;
+namespace GoogleVoiceParser;
 use Symfony\Component\CssSelector\CssSelector;
 
 use Symfony\Component\DomCrawler\Crawler;
