@@ -31,14 +31,11 @@ class StatsGetter
 
   // This functionality should move out to a service.
   function getMessages($string_to_find) {
+    // @todo, ini_setting is a hack here to avoid timeouts.
     ini_set('max_execution_time', '300');
     $all_messages = $this->data_getter->getAllMessages();
 
-
-
-
     $results = array();
-
     foreach ($all_messages as $message) {
       $month = substr($message['time'], 0, 7);
 
@@ -58,7 +55,7 @@ class StatsGetter
     ksort($results);
 
     foreach($results as $month => $numbers) {
-      $ratio = $numbers['texts_with_exclamation']/$numbers['total_texts'];
+      $ratio = $numbers['texts_with_exclamation'] / $numbers['total_texts'];
       $results[$month]['percentage'] = round($ratio, 2) * 100;
     }
 
