@@ -27,7 +27,13 @@ class PlotController extends DefaultController
       $points = array();
       foreach ($messages_stats as $month => $stats) {
         $points[] = array(
-          $month,
+          // Add a string to indicate that the date is the middle of the month.
+          // For example "2013-02-15". This is done because "2013-02" is getting
+          // rendered as January in the chart. I'm guessing because 2013-02
+          // is interpretted as midnight on February 1st UTC, which is still
+          // January in a behind timezone.
+          // @todo, Come up with a better workaround.
+          $month . '-15',
           $stats['percentage'],
           $stats['texts_with_exclamation'] . ' out of ' .  $stats['total_texts'],
         );
