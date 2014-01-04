@@ -10,5 +10,5 @@
 /bin/
 /composer.phar
 
-google_voice_export/
-!google_voice_export/.gitkeep
+app/google_voice_export/
+!app/google_voice_export/.gitkeep
