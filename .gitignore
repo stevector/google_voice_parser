@@ -10,5 +10,5 @@
 /bin/
 /composer.phar
 
-# Allow the sample bundle to remain in place for reference.
-src/Acme
+google_voice_export/
+!google_voice_export/.gitkeep
