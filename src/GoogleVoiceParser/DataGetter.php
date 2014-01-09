@@ -26,11 +26,11 @@ class DataGetter
         if (strpos($file_name, ' - Text - ')) {
         // @todo, remove the if statement which is present to keep low the
         // of files returned so that pages load fast while developing.
-        if (strpos($file_name, 'Garn')) {
+        // if (strpos($file_name, '')) {
           $single_file_parser = new singleFileParser($this->directory . '/' . $file_name);
           $derived_array = $single_file_parser->getOutputArray();
           $all_messages = array_merge($all_messages, $derived_array);
-        }
+        // }
         }
       }
     }
